@@ -4041,3 +4041,132 @@ initializeCollaboratorsFromFile
 	estaDistraido := false.!
 
 ----SNAPSHOT----(19 September 2022 18:07:07) CuisUniversity-5466.image priorSource: 7194089!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:50'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:10:54'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:03'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 18:12:04'!
+ERROR!
+
+----STARTUP---- (19 September 2022 21:30:42) as C:\Users\Dell\Desktop\Algoritmos_Programacion_III\ejercicios-2022-2c\01-AtaquesFantasticos\ResolucionEjercicio\CuisUniversity-5466.image!
+
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:32:46'!
+ERROR!
+
+!testRun: #DenotativeObjectTestCase #performRealTest stamp: 'A 9/19/2022 21:33:57'!
+ERROR!
