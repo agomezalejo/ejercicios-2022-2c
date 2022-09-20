@@ -92,7 +92,7 @@ usarHacha
 	dañoAInfligir := 10*pv.! !
 
 
-!CombatienteHumanoArthas class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 02:47:31'!
+!CombatienteHumanoArthas class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 12:05:27'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -199,7 +199,7 @@ usarHacha
 	dañoAInfligir := (10*pv + self fuerza).! !
 
 
-!CombatienteOrcoMankrik class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 02:47:31'!
+!CombatienteOrcoMankrik class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 12:05:27'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -306,7 +306,7 @@ usarHacha
 	dañoAInfligir :=  (10*pv + self fuerza).! !
 
 
-!CombatienteOrcoOlgra class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 02:47:31'!
+!CombatienteOrcoOlgra class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 12:05:27'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -822,7 +822,7 @@ DenotativeObject subclass: #OrquestadorDeCombates
 
 !classDefinition: 'OrquestadorDeCombates class' category: 'AtaquesFantasticosPaso2'!
 OrquestadorDeCombates class
-	instanceVariableNames: 'bando1 bando2 cantidadDeRondas ganador'!
+	instanceVariableNames: 'bando1 bando2 resultadoDelCombate'!
 
 !OrquestadorDeCombates class methodsFor: 'bandos' stamp: 'A 9/20/2022 00:18:46'!
 establecerBando1: bando1AEstablecer yBando2: bando2AEstablecer 
@@ -838,38 +838,33 @@ obtenerBando2
 	^bando2.! !
 
 
-!OrquestadorDeCombates class methodsFor: 'Rondas' stamp: 'A 9/20/2022 02:31:01'!
+!OrquestadorDeCombates class methodsFor: 'Rondas' stamp: 'A 9/20/2022 11:12:44'!
 desarrollarDuranteRondas: nroDeRondas
-	| resultado duracion combatientesVivos |.
+	| resultado duracion |.
 	resultado:={}.
 	duracion:=nroDeRondas. 
 	1 to: nroDeRondas do: [:i | 
-		bando1 do: [:combatiente | combatiente atacar]. 
-		combatientesVivos := bando2 select: [:combatiente | combatiente puntosDeVida > 0].
-		combatientesVivos isEmpty ifTrue: [
-			resultado:=bando1.
-			duracion:=i.
-			^{resultado . duracion}
-		].
-		bando2 do: [:combatiente | combatiente atacar].
-		combatientesVivos := bando1 select: [:combatiente | combatiente puntosDeVida > 0].
-		combatientesVivos isEmpty ifTrue: [
-			resultado:=bando2.
-			duracion:=i.
-			^{resultado . duracion}
-		].
+		(self desarrollarOfensivaDelBando: bando1 contra: bando2) ifTrue: [ resultado:=bando1. duracion:=i. ^{resultado . duracion}].
+		(self desarrollarOfensivaDelBando: bando2 contra: bando1) ifTrue: [ resultado:=bando2. duracion:=i. ^{resultado . duracion}].
 		].
 	^{resultado. duracion .}! !
 
+!OrquestadorDeCombates class methodsFor: 'Rondas' stamp: 'A 9/20/2022 11:11:54'!
+desarrollarOfensivaDelBando: unBandoAtancante contra: bandoEnemigo
+	| combatientesVivos |
+	unBandoAtancante do: [:combatiente | combatiente atacar]. 
+		combatientesVivos := bandoEnemigo select: [:combatiente | combatiente puntosDeVida > 0].
+		^combatientesVivos isEmpty.
+		! !
 
-!OrquestadorDeCombates class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 02:47:31'!
+
+!OrquestadorDeCombates class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 12:05:27'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
 	bando1 := ((Array new: 1) at: 1 put: CombatienteHumanoArthas; yourself).
 	bando2 := ((Array new: 1) at: 1 put: CombatienteOrcoOlgra; yourself).
-	cantidadDeRondas := 0.
-	ganador := nil.! !
+	resultadoDelCombate := Resultado.! !
 
 
 !classDefinition: #OrquestadorDeCombatesTest category: 'AtaquesFantasticosPaso2'!
@@ -885,26 +880,29 @@ DenotativeObject subclass: #OrquestadorDeCombatesTest
 OrquestadorDeCombatesTest class
 	instanceVariableNames: ''!
 
-!OrquestadorDeCombatesTest class methodsFor: 'para completar' stamp: 'A 9/20/2022 02:43:52'!
+!OrquestadorDeCombatesTest class methodsFor: 'para completar' stamp: 'A 9/20/2022 11:19:57'!
 assertElResultadoIndicaQueGanoElBando1: resultadoDeUnCombate alcanzadaLaRonda: unNumeroDeRondaEsperado
 	| bandoGanador duracionCombate |.
 	bandoGanador := resultadoDeUnCombate at: 1.
 	duracionCombate := resultadoDeUnCombate at: 2.
-	Assert isTrue: (bandoGanador = (self orquestadorDeCombates obtenerBando1) & duracionCombate = unNumeroDeRondaEsperado) description: 'No se obtuvo el resultado deseado'.! !
+	Assert isTrue: (bandoGanador = (self orquestadorDeCombates obtenerBando1)) description: 'El bando1 no gano el combate'.
+	Assert isTrue: (duracionCombate = unNumeroDeRondaEsperado) description: 'El número de rondas no es el esperado'.! !
 
-!OrquestadorDeCombatesTest class methodsFor: 'para completar' stamp: 'A 9/20/2022 02:44:11'!
+!OrquestadorDeCombatesTest class methodsFor: 'para completar' stamp: 'A 9/20/2022 11:20:40'!
 assertElResultadoIndicaQueGanoElBando2: resultadoDeUnCombate alcanzadaLaRonda: unNumeroDeRondaEsperado
 	| bandoGanador duracionCombate |.
 	bandoGanador := resultadoDeUnCombate at: 1.
 	duracionCombate := resultadoDeUnCombate at: 2.
-	Assert isTrue: (bandoGanador = (self orquestadorDeCombates obtenerBando2) & duracionCombate = unNumeroDeRondaEsperado) description: 'No se obtuvo el resultado deseado'.! !
+	Assert isTrue: (bandoGanador = (self orquestadorDeCombates obtenerBando2)) description: 'El bando2 no gano el combate'.
+	Assert isTrue: (duracionCombate = unNumeroDeRondaEsperado) description: 'El número de rondas no es el esperado'.! !
 
-!OrquestadorDeCombatesTest class methodsFor: 'para completar' stamp: 'A 9/20/2022 02:03:54'!
+!OrquestadorDeCombatesTest class methodsFor: 'para completar' stamp: 'A 9/20/2022 11:22:31'!
 assertElResultadoIndicaQueNoHayGanador: resultadoDeUnCombate  alcanzadaLaRonda: unNumeroDeRondaEsperado
 	| bandoGanador duracionCombate |.
 	bandoGanador := resultadoDeUnCombate at: 1.
 	duracionCombate := resultadoDeUnCombate at: 2.
-	Assert isTrue: (bandoGanador isEmpty & duracionCombate = unNumeroDeRondaEsperado) description: 'No se obtuvo el resultado deseado'.! !
+	Assert isTrue: (bandoGanador isEmpty) description: 'El ganador no es indeterminado'.
+	Assert isTrue: (duracionCombate = unNumeroDeRondaEsperado) description: 'El número de rondas no es el esperado'.! !
 
 !OrquestadorDeCombatesTest class methodsFor: 'para completar' stamp: 'A 9/20/2022 01:19:11'!
 establecerCombateEntreBando1: unBando1 contraBando2: unBando2
@@ -1145,8 +1143,48 @@ test13AlDesarrollarUnCombateLosDelBando2NoGananSiTodosLosDelBando1NoEstanFueraDe
 	
 	self assertElResultadoIndicaQueNoHayGanador: resultado alcanzadaLaRonda: 10.! !
 
+
+!classDefinition: #Resultado category: 'AtaquesFantasticosPaso2'!
+DenotativeObject subclass: #Resultado
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'AtaquesFantasticosPaso2'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Resultado class' category: 'AtaquesFantasticosPaso2'!
+Resultado class
+	instanceVariableNames: 'ganador duracion'!
+
+!Resultado class methodsFor: 'ganador' stamp: 'A 9/20/2022 12:00:42'!
+establecerGanador: unGanador
+	ganador := unGanador.! !
+
+!Resultado class methodsFor: 'ganador' stamp: 'A 9/20/2022 12:02:04'!
+obtenerGanador
+	^ganador.! !
+
+
+!Resultado class methodsFor: 'duracion' stamp: 'A 9/20/2022 12:01:29'!
+establecerDuracion: unaDuracion
+	duracion := unaDuracion.! !
+
+!Resultado class methodsFor: 'duracion' stamp: 'A 9/20/2022 12:02:34'!
+obtenerDuracion
+	^duracion.! !
+
+
+!Resultado class methodsFor: '--** private fileout/in **--' stamp: 'A 9/20/2022 12:05:27'!
+initializeCollaboratorsFromFile
+	"Auto generated method for loading purposes - Do not modify it"
+
+	ganador := nil.
+	duracion := nil.! !
+
 CombatienteHumanoArthas initializeAfterFileIn!
 CombatienteOrcoMankrik initializeAfterFileIn!
 CombatienteOrcoOlgra initializeAfterFileIn!
 CombatientesTest initialize!
 OrquestadorDeCombates initializeAfterFileIn!
+Resultado initializeAfterFileIn!
