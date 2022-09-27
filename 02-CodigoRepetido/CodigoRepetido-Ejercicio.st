@@ -21,6 +21,7 @@ TestCase subclass: #CustomerBookTest
 	poolDictionaries: ''
 	category: 'CodigoRepetido-Ejercicio'!
 
+<<<<<<< HEAD
 !CustomerBookTest methodsFor: 'repeated' stamp: 'A 9/27/2022 14:53:19'!
 assertNumberActiveCustomers: totalActiveCustomers numberSupendedCustomers: totalSupendedCustomers totalNumberOfCustomers: toltalCustomers  in: ACustomerBook
 	^ (totalActiveCustomers = ACustomerBook numberOfActiveCustomers) 
@@ -55,6 +56,8 @@ is: ACustomer theOnlyCustomerInCustomerBook: customerBook
 	self assert: (customerBook includesCustomerNamed: ACustomer )].! !
 
 
+=======
+>>>>>>> 745895653fc389f249f4a8e87397ecac9a9558e7
 !CustomerBookTest methodsFor: 'testing' stamp: 'A 9/27/2022 12:27:29'!
 test01AddingCustomerShouldNotTakeMoreThan50Milliseconds
 
@@ -174,6 +177,43 @@ test08CanNotSuspendAnAlreadySuspendedCustomer
 	self should: suspendCustomerSuspended raise: CantSuspend withExceptionDo: [ :anError | customerBookDidNotChange].
 	! !
 
+<<<<<<< HEAD
+=======
+
+!CustomerBookTest methodsFor: 'repeated' stamp: 'A 9/27/2022 14:53:19'!
+assertNumberActiveCustomers: totalActiveCustomers numberSupendedCustomers: totalSupendedCustomers totalNumberOfCustomers: toltalCustomers  in: ACustomerBook
+	^ (totalActiveCustomers = ACustomerBook numberOfActiveCustomers) 
+	and: (totalSupendedCustomers = ACustomerBook numberOfSuspendedCustomers) 
+	and: (toltalCustomers = ACustomerBook numberOfCustomers).! !
+
+!CustomerBookTest methodsFor: 'repeated' stamp: 'A 9/27/2022 15:01:53'!
+checkNumberActiveCustomers: totalActiveCustomers numberSupendedCustomers: totalSupendedCustomers totalNumberOfCustomers: toltalCustomers  in: ACustomerBook
+	^ (totalActiveCustomers = ACustomerBook numberOfActiveCustomers) 
+	and: (totalSupendedCustomers = ACustomerBook numberOfSuspendedCustomers) 
+	and: (toltalCustomers = ACustomerBook numberOfCustomers).! !
+
+!CustomerBookTest methodsFor: 'repeated' stamp: 'A 9/27/2022 14:26:23'!
+createCustomerBookWith: aCustomer
+	| customerBook |
+	customerBook := CustomerBook new.
+	customerBook addCustomerNamed: aCustomer.
+	^customerBook.! !
+
+!CustomerBookTest methodsFor: 'repeated' stamp: 'A 9/27/2022 14:28:24'!
+createCustomerBookWithSuspended: aCustomer
+	| customerBook |
+	
+	customerBook := self createCustomerBookWith: aCustomer.
+	customerBook suspendCustomerNamed: aCustomer.
+	^customerBook.	 ! !
+
+!CustomerBookTest methodsFor: 'repeated' stamp: 'A 9/27/2022 15:34:42'!
+is: ACustomer theOnlyCustomerInCustomerBook: customerBook
+
+	^[self assert: customerBook numberOfCustomers = 1.
+	self assert: (customerBook includesCustomerNamed: ACustomer )].! !
+
+>>>>>>> 745895653fc389f249f4a8e87397ecac9a9558e7
 
 !classDefinition: #CustomerBook category: 'CodigoRepetido-Ejercicio'!
 Object subclass: #CustomerBook
@@ -187,10 +227,17 @@ includesCustomerNamed: aName
 
 	^(active includes: aName) or: [ suspended includes: aName ]! !
 
+<<<<<<< HEAD
 !CustomerBook methodsFor: 'testing' stamp: 'NR 4/3/2019 10:14:26'!
 isEmpty
 	
 	^active isEmpty and: [ suspended isEmpty ]! !
+=======
+!CustomerBook methodsFor: 'testing' stamp: 'MA 9/27/2022 21:28:25'!
+isEmpty
+	
+	^self numberOfCustomers = 0! !
+>>>>>>> 745895653fc389f249f4a8e87397ecac9a9558e7
 
 
 !CustomerBook methodsFor: 'initialization' stamp: 'NR 4/3/2019 10:14:26'!
@@ -201,11 +248,19 @@ initialize
 	suspended:= OrderedCollection new.! !
 
 
+<<<<<<< HEAD
 !CustomerBook methodsFor: 'customer management' stamp: 'NR 4/3/2019 10:14:26'!
 addCustomerNamed: aName
 
 	aName isEmpty ifTrue: [ self signalCustomerNameCannotBeEmpty ].
 	((active includes: aName) or: [suspended includes: aName]) ifTrue: [ self signalCustomerAlreadyExists ].
+=======
+!CustomerBook methodsFor: 'customer management' stamp: 'MA 9/27/2022 21:30:55'!
+addCustomerNamed: aName
+
+	aName isEmpty ifTrue: [ self signalCustomerNameCannotBeEmpty ].
+	(self includesCustomerNamed: aName) ifTrue: [ self signalCustomerAlreadyExists ].
+>>>>>>> 745895653fc389f249f4a8e87397ecac9a9558e7
 	
 	active add: aName ! !
 
@@ -214,16 +269,24 @@ numberOfActiveCustomers
 	
 	^active size! !
 
+<<<<<<< HEAD
 !CustomerBook methodsFor: 'customer management' stamp: 'NR 4/3/2019 10:14:26'!
 numberOfCustomers
 	
 	^active size + suspended size! !
+=======
+!CustomerBook methodsFor: 'customer management' stamp: 'MA 9/27/2022 21:27:45'!
+numberOfCustomers
+	
+	^self numberOfActiveCustomers + self numberOfSuspendedCustomers! !
+>>>>>>> 745895653fc389f249f4a8e87397ecac9a9558e7
 
 !CustomerBook methodsFor: 'customer management' stamp: 'NR 9/19/2018 17:36:09'!
 numberOfSuspendedCustomers
 	
 	^suspended size! !
 
+<<<<<<< HEAD
 !CustomerBook methodsFor: 'customer management' stamp: 'NR 4/3/2019 10:14:26'!
 removeCustomerNamed: aName 
  
@@ -246,6 +309,19 @@ removeCustomerNamed: aName
 	].
 	
 	^ NotFound signal.
+=======
+!CustomerBook methodsFor: 'customer management' stamp: 'MA 9/27/2022 22:19:34'!
+removeCustomerNamed: aName 
+ 	
+	(self includesCustomerNamed: aName) ifFalse: [^ NotFound signal.].
+	
+	self removeCustomerNamed: aName from: active.
+	self removeCustomerNamed: aName from: suspended.! !
+
+!CustomerBook methodsFor: 'customer management' stamp: 'MA 9/27/2022 22:16:33'!
+removeCustomerNamed: aName from: aCollection
+ 	(aCollection includes: aName) ifTrue: [aCollection remove: aName].
+>>>>>>> 745895653fc389f249f4a8e87397ecac9a9558e7
 ! !
 
 !CustomerBook methodsFor: 'customer management' stamp: 'HernanWilkinson 7/6/2011 17:52'!
