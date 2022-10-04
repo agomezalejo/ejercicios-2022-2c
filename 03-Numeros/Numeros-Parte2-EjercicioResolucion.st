@@ -336,42 +336,42 @@ isZero
 	self subclassResponsibility ! !
 
 
-!Numero methodsFor: 'private' stamp: 'A 10/4/2022 08:43:05'!
-addToAFraction: anAugend
+!Numero methodsFor: 'operations' stamp: 'M 10/4/2022 17:13:57'!
+beAddedToAFraccion: anAugend
 	self subclassResponsibility! !
 
-!Numero methodsFor: 'private' stamp: 'A 10/4/2022 08:43:19'!
-addToAnInt: anAugend
+!Numero methodsFor: 'operations' stamp: 'M 10/4/2022 17:14:32'!
+beAddedToAnEntero: anAugend
 	self subclassResponsibility! !
 
-!Numero methodsFor: 'private' stamp: 'A 10/4/2022 08:43:29'!
-dividedToAFraction: aDivisor
+!Numero methodsFor: 'operations' stamp: 'M 10/4/2022 17:14:59'!
+beDividedByAFraccion: aDivisor
 	self subclassResponsibility! !
 
-!Numero methodsFor: 'private' stamp: 'A 10/4/2022 08:43:41'!
-dividedToAnInt: aDivisor
+!Numero methodsFor: 'operations' stamp: 'M 10/4/2022 17:15:21'!
+beDividedByAnEntero: aDivisor
 	self subclassResponsibility! !
 
-!Numero methodsFor: 'private' stamp: 'HernanWilkinson 5/7/2016 22:48'!
+!Numero methodsFor: 'operations' stamp: 'M 10/4/2022 17:15:54'!
+beMultipliedByAFraccion: aMultiplier
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:15'!
+beMultipliedByAnEntero: aMultiplier
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:32'!
+beSubstractedByAFraccion: aSubstrahend
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:55'!
+beSubstractedByAnEntero: aSubstrahend
+	self subclassResponsibility! !
+
+!Numero methodsFor: 'operations' stamp: 'HernanWilkinson 5/7/2016 22:48'!
 invalidNumberType
 
 	self error: self class invalidNumberTypeErrorDescription! !
-
-!Numero methodsFor: 'private' stamp: 'A 10/4/2022 08:43:50'!
-multipliedToAFraction: aMultiplier
-	self subclassResponsibility! !
-
-!Numero methodsFor: 'private' stamp: 'A 10/4/2022 08:44:01'!
-multipliedToAnInt: aMultiplier
-	self subclassResponsibility! !
-
-!Numero methodsFor: 'private' stamp: 'A 10/4/2022 08:44:12'!
-substractedToAFraction: aSubstrahend
-	self subclassResponsibility! !
-
-!Numero methodsFor: 'private' stamp: 'A 10/4/2022 08:44:21'!
-substractedToAnInt: aSubstrahend
-	self subclassResponsibility! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -396,23 +396,23 @@ Numero subclass: #Entero
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 05:04:35'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/4/2022 17:16:15'!
 * aMultiplier 
-	^aMultiplier multipliedToAnInt: self.
+	^aMultiplier beMultipliedByAnEntero: self.
 	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 04:50:47'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/4/2022 17:14:32'!
 + anAdder 
-	^anAdder addToAnInt: self.! !
+	^anAdder beAddedToAnEntero: self.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 08:24:49'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/4/2022 17:16:55'!
 - aSubtrahend 
-	^aSubtrahend substractedToAnInt: self.
+	^aSubtrahend beSubstractedByAnEntero: self.
 ! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 05:20:30'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/4/2022 17:15:21'!
 / aDivisor 
-	^aDivisor dividedToAnInt: self.
+	^aDivisor beDividedByAnEntero: self.
 ! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 08:33:41'!
@@ -483,39 +483,39 @@ greatestCommonDivisorWith: anEntero
 	^self class with: (value gcd: anEntero integerValue)! !
 
 
-!Entero methodsFor: 'private' stamp: 'A 10/4/2022 04:49:47'!
-addToAFraction: anAugend
-	^anAugend addToAnInt: self.! !
+!Entero methodsFor: 'operations' stamp: 'M 10/4/2022 17:14:32'!
+beAddedToAFraccion: anAugend
+	^anAugend beAddedToAnEntero: self.! !
 
-!Entero methodsFor: 'private' stamp: 'A 10/4/2022 04:32:01'!
-addToAnInt: anAugend
+!Entero methodsFor: 'operations' stamp: 'M 10/4/2022 17:14:32'!
+beAddedToAnEntero: anAugend
 	
 	^self class with: value + anAugend integerValue! !
 
-!Entero methodsFor: 'private' stamp: 'A 10/4/2022 05:24:31'!
-dividedToAFraction: aDivisor
+!Entero methodsFor: 'operations' stamp: 'M 10/4/2022 17:14:59'!
+beDividedByAFraccion: aDivisor
 	
 	^(aDivisor numerator) / (aDivisor denominator * self)! !
 
-!Entero methodsFor: 'private' stamp: 'A 10/4/2022 05:15:26'!
-dividedToAnInt: aDivisor
+!Entero methodsFor: 'operations' stamp: 'M 10/4/2022 17:15:21'!
+beDividedByAnEntero: aDivisor
 	
 	^Fraccion with: aDivisor over: self! !
 
-!Entero methodsFor: 'private' stamp: 'A 10/4/2022 05:09:00'!
-multipliedToAFraction: aMultiplier
-	^aMultiplier multipliedToAnInt: self.! !
+!Entero methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:15'!
+beMultipliedByAFraccion: aMultiplier
+	^aMultiplier beMultipliedByAnEntero: self.! !
 
-!Entero methodsFor: 'private' stamp: 'A 10/4/2022 05:08:24'!
-multipliedToAnInt: aMultiplier
+!Entero methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:15'!
+beMultipliedByAnEntero: aMultiplier
 	^self class with: value * aMultiplier integerValue! !
 
-!Entero methodsFor: 'private' stamp: 'A 10/4/2022 08:22:59'!
-substractedToAFraction: aSubstrahend
+!Entero methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:32'!
+beSubstractedByAFraccion: aSubstrahend
 	^(aSubstrahend numerator - (aSubstrahend denominator * self)) /  aSubstrahend denominator.! !
 
-!Entero methodsFor: 'private' stamp: 'A 10/4/2022 08:30:37'!
-substractedToAnInt: aSubstrahend
+!Entero methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:55'!
+beSubstractedByAnEntero: aSubstrahend
 	^self class with: aSubstrahend integerValue  - (self integerValue).! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -549,7 +549,7 @@ Entero subclass: #Cero
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Cero methodsFor: 'private' stamp: 'A 10/4/2022 08:41:40'!
+!Cero methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 08:41:40'!
 fibonacci
 	 ^Entero with: 1.! !
 
@@ -571,7 +571,7 @@ Entero subclass: #EnteroMayorAUno
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!EnteroMayorAUno methodsFor: 'private' stamp: 'A 10/4/2022 08:33:55'!
+!EnteroMayorAUno methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 08:33:55'!
 fibonacci
 	| one two |
 	
@@ -598,7 +598,7 @@ Entero subclass: #Negativo
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Negativo methodsFor: 'private' stamp: 'A 10/4/2022 08:31:46'!
+!Negativo methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 08:31:46'!
 fibonacci
 	self error: Entero negativeFibonacciErrorDescription! !
 
@@ -620,7 +620,7 @@ Entero subclass: #Uno
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Uno methodsFor: 'private' stamp: 'A 10/4/2022 08:41:34'!
+!Uno methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 08:41:34'!
 fibonacci
  	^Entero with: 1.! !
 
@@ -642,26 +642,26 @@ Numero subclass: #Fraccion
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 05:10:38'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 10/4/2022 17:15:54'!
 * aMultiplier 
-	^aMultiplier multipliedToAFraction: self.
+	^aMultiplier beMultipliedByAFraccion: self.
 	
 	! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 04:51:47'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 10/4/2022 17:13:57'!
 + anAdder 
 	
-	^anAdder addToAFraction: self.
+	^anAdder beAddedToAFraccion: self.
 	! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 08:27:08'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 10/4/2022 17:16:33'!
 - aSubtrahend 
-	^aSubtrahend substractedToAFraction: self.
+	^aSubtrahend beSubstractedByAFraccion: self.
 ! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 05:25:17'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 10/4/2022 17:14:59'!
 / aDivisor 
-	^aDivisor dividedToAFraction: self.
+	^aDivisor beDividedByAFraccion: self.
 	
 	! !
 
@@ -742,16 +742,16 @@ printOn: aStream
 		print: denominator ! !
 
 
-!Fraccion methodsFor: 'private' stamp: 'A 10/4/2022 04:45:06'!
-addToAFraction: anAugend
+!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:13:57'!
+beAddedToAFraccion: anAugend
 	| newDenominator newNumerator |
 	newNumerator := (anAugend numerator * denominator) + (anAugend denominator * numerator).
 	newDenominator := anAugend denominator * denominator.
 		
 	^newNumerator / newDenominator ! !
 
-!Fraccion methodsFor: 'private' stamp: 'A 10/4/2022 04:45:27'!
-addToAnInt: anAugend
+!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:14:32'!
+beAddedToAnEntero: anAugend
 	| newNumerator |
 	
 	newNumerator := (numerator) + (denominator * anAugend).	
@@ -759,28 +759,28 @@ addToAnInt: anAugend
 	^newNumerator / denominator 
 ! !
 
-!Fraccion methodsFor: 'private' stamp: 'A 10/4/2022 05:28:02'!
-dividedToAFraction: aDivisor
+!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:14:59'!
+beDividedByAFraccion: aDivisor
 
 	^(aDivisor numerator * denominator) / (aDivisor denominator * numerator)! !
 
-!Fraccion methodsFor: 'private' stamp: 'A 10/4/2022 05:19:56'!
-dividedToAnInt: aDivisor
+!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:15:21'!
+beDividedByAnEntero: aDivisor
 	
 	^(aDivisor * denominator) / numerator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'A 10/4/2022 05:06:08'!
-multipliedToAFraction: aMultiplier
+!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:15:54'!
+beMultipliedByAFraccion: aMultiplier
 	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator).! !
 
-!Fraccion methodsFor: 'private' stamp: 'A 10/4/2022 05:03:06'!
-multipliedToAnInt: aMultiplier
+!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:16:15'!
+beMultipliedByAnEntero: aMultiplier
 	| newNumerator |
 	newNumerator := aMultiplier * (numerator).
 	^newNumerator / denominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'A 10/4/2022 08:24:15'!
-substractedToAFraction: aSubstrahend
+!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:16:32'!
+beSubstractedByAFraccion: aSubstrahend
 	| newNumerator newDenominator |
 
 	newNumerator := (denominator * aSubstrahend numerator) - (numerator * aSubstrahend denominator).
@@ -788,8 +788,8 @@ substractedToAFraction: aSubstrahend
 
 	^newNumerator / newDenominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'A 10/4/2022 08:20:43'!
-substractedToAnInt: aSubstrahend
+!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:16:55'!
+beSubstractedByAnEntero: aSubstrahend
 	^((denominator * aSubstrahend) - numerator) / denominator.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
