@@ -742,7 +742,7 @@ printOn: aStream
 		print: denominator ! !
 
 
-!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:13:57'!
+!Fraccion methodsFor: 'operations' stamp: 'M 10/4/2022 17:13:57'!
 beAddedToAFraccion: anAugend
 	| newDenominator newNumerator |
 	newNumerator := (anAugend numerator * denominator) + (anAugend denominator * numerator).
@@ -750,7 +750,7 @@ beAddedToAFraccion: anAugend
 		
 	^newNumerator / newDenominator ! !
 
-!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:14:32'!
+!Fraccion methodsFor: 'operations' stamp: 'M 10/4/2022 17:14:32'!
 beAddedToAnEntero: anAugend
 	| newNumerator |
 	
@@ -759,27 +759,27 @@ beAddedToAnEntero: anAugend
 	^newNumerator / denominator 
 ! !
 
-!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:14:59'!
+!Fraccion methodsFor: 'operations' stamp: 'M 10/4/2022 17:14:59'!
 beDividedByAFraccion: aDivisor
 
 	^(aDivisor numerator * denominator) / (aDivisor denominator * numerator)! !
 
-!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:15:21'!
+!Fraccion methodsFor: 'operations' stamp: 'M 10/4/2022 17:15:21'!
 beDividedByAnEntero: aDivisor
 	
 	^(aDivisor * denominator) / numerator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:15:54'!
+!Fraccion methodsFor: 'operations' stamp: 'M 10/4/2022 17:15:54'!
 beMultipliedByAFraccion: aMultiplier
 	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator).! !
 
-!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:16:15'!
+!Fraccion methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:15'!
 beMultipliedByAnEntero: aMultiplier
 	| newNumerator |
 	newNumerator := aMultiplier * (numerator).
 	^newNumerator / denominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:16:32'!
+!Fraccion methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:32'!
 beSubstractedByAFraccion: aSubstrahend
 	| newNumerator newDenominator |
 
@@ -788,7 +788,7 @@ beSubstractedByAFraccion: aSubstrahend
 
 	^newNumerator / newDenominator.! !
 
-!Fraccion methodsFor: 'private' stamp: 'M 10/4/2022 17:16:55'!
+!Fraccion methodsFor: 'operations' stamp: 'M 10/4/2022 17:16:55'!
 beSubstractedByAnEntero: aSubstrahend
 	^((denominator * aSubstrahend) - numerator) / denominator.! !
 
