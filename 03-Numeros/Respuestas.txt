@@ -22,4 +22,12 @@ Si todas las subclases saben responder un mismo mensaje, ¿por qué ponemos ese 
 
 ## Respuestas
 
-1. 
+1. En un Double Dispatch el primer llamado nos permite conocer la clase del objeto con el que se colabora, y el segundo llamado nos brinda informacion sobre que accion se lleva a cabo entre los dos colaboradores
+
+2. Consideramos que el mejor lugar para tener la logica encargada de instanciar los objetos es dentro de un metodo de clase que se encargue de llamar al inicializador cuando deseemos crear una nueva instancia. De esta manera podemos estandarizar la creacion de dichas instancias y evitar que se creen desde distintos lugares o con diferentes formas.
+
+3. Para nombrar las categorias de los metodos consideramos adecuado utilizar nombres que describan de manera general el proposito de los metodos que categorizan.
+
+4. Eso sirve para generar abstraccion en la Super Clase, y asi indicar que dichos mensajes deben ser implementados con su propia logica dentro de cada subclase. Esto nos sirve para poder abstraernos de la implementacion puntual para cada objeto y sacar provecho del polimorfismo.
+
+5. El principal problema que trae violar el encapsulamiento radica en que se pierde modularidad y se gana acoplamiento haciendo que los objetos dependan de las implementaciones puntuales para relacionarse entre si.
