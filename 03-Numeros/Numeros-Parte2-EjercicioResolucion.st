@@ -456,6 +456,17 @@ printOn: aStream
 	aStream print: value ! !
 
 
+!Entero methodsFor: 'checking' stamp: 'A 10/4/2022 21:06:21'!
+raiseErrorOnInvalidDenominator
+
+	^nil! !
+
+!Entero methodsFor: 'checking' stamp: 'A 10/4/2022 21:06:30'!
+raiseErrorOnInvalidNumerator
+
+	^nil! !
+
+
 !Entero methodsFor: 'testing' stamp: 'NR 9/23/2018 22:17:55'!
 isNegative
 	
@@ -553,6 +564,12 @@ Entero subclass: #Cero
 fibonacci
 	 ^Entero with: 1.! !
 
+
+!Cero methodsFor: 'checking' stamp: 'A 10/4/2022 21:06:48'!
+raiseErrorOnInvalidNumerator
+
+	self error: 'una fraccion no puede ser cero'! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Cero class' category: 'Numeros-Parte2-Ejercicio'!
@@ -623,6 +640,11 @@ Entero subclass: #Uno
 !Uno methodsFor: 'arithmetic operations' stamp: 'A 10/4/2022 08:41:34'!
 fibonacci
  	^Entero with: 1.! !
+
+
+!Uno methodsFor: 'checking' stamp: 'A 10/4/2022 21:07:12'!
+raiseErrorOnInvalidDenominator
+	self error: 'una fraccion no puede tener denominador 1 porque sino es un entero'! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -706,12 +728,12 @@ numerator
 	^ numerator! !
 
 
-!Fraccion methodsFor: 'initialization' stamp: 'HernanWilkinson 5/7/2016 22:54'!
+!Fraccion methodsFor: 'initialization' stamp: 'A 10/4/2022 21:07:47'!
 initializeWith: aNumerator over: aDenominator
 
 	"Estas precondiciones estan por si se comenten errores en la implementacion - Hernan"
-	aNumerator isZero ifTrue: [ self error: 'una fraccion no puede ser cero' ].
-	aDenominator isOne ifTrue: [ self error: 'una fraccion no puede tener denominador 1 porque sino es un entero' ].
+	aNumerator raiseErrorOnInvalidNumerator.
+	aDenominator raiseErrorOnInvalidDenominator.
 	
 	numerator := aNumerator.
 	denominator := aDenominator ! !
