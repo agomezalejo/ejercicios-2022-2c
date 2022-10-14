@@ -5,22 +5,22 @@ TestCase subclass: #StackTest
 	poolDictionaries: ''
 	category: 'StackPrimeraParte'!
 
-!StackTest methodsFor: 'basic operations' stamp: 'A 10/9/2022 07:35:01'!
+!StackTest methodsFor: 'basic operations' stamp: 'A 10/10/2022 14:50:43'!
 test02ElementCanBeAdded
 	| stack elementToAdd addedElement |
 	
-	stack := Stack newEmpy.
+	stack := Stack new.
 	elementToAdd := #firstElement.
 	
 	addedElement := stack push: elementToAdd.
 	
 	self assert: (addedElement = elementToAdd)! !
 
-!StackTest methodsFor: 'basic operations' stamp: 'A 10/9/2022 07:45:49'!
+!StackTest methodsFor: 'basic operations' stamp: 'A 10/10/2022 14:50:47'!
 test03ElementCanBeRemoved
 	| stack elementToAdd removedElement |
 	
-	stack := Stack newEmpy.
+	stack := Stack new.
 	elementToAdd := #firstElement.
 	
 	stack push: elementToAdd.
@@ -29,11 +29,11 @@ test03ElementCanBeRemoved
 	
 	self assert: (removedElement = elementToAdd).! !
 
-!StackTest methodsFor: 'basic operations' stamp: 'A 10/9/2022 07:51:55'!
+!StackTest methodsFor: 'basic operations' stamp: 'A 10/10/2022 14:50:50'!
 test04PopReturnsTheLastElement
 	| stack removedElement elementToAdd |
 	
-	stack := Stack newEmpy.
+	stack := Stack new.
 	elementToAdd := #firstElement.
 	
 	stack push: elementToAdd.
@@ -43,21 +43,21 @@ test04PopReturnsTheLastElement
 	self assert: (removedElement = elementToAdd).! !
 
 
-!StackTest methodsFor: 'status' stamp: 'A 10/9/2022 07:11:15'!
+!StackTest methodsFor: 'status' stamp: 'A 10/10/2022 14:50:35'!
 test01StackShouldBeEmptyWhenCreated
 
 	| stack |
 	
-	stack := Stack newEmpy.
+	stack := Stack new.
 	
 	self assert: stack isEmpty! !
 
 
-!StackTest methodsFor: 'behavior' stamp: 'A 10/9/2022 07:51:07'!
+!StackTest methodsFor: 'behavior' stamp: 'A 10/10/2022 14:50:57'!
 test05LastInFirstOut
 	| stack removedElement firstElementToAdd lastElementToAdd secondRemovedElement |
 	
-	stack := Stack newEmpy.
+	stack := Stack new.
 	firstElementToAdd := #firstElement.
 	lastElementToAdd := #lastElement.
 	
@@ -70,11 +70,11 @@ test05LastInFirstOut
 	self assert: (removedElement = lastElementToAdd).
 	self assert: (secondRemovedElement = firstElementToAdd).! !
 
-!StackTest methodsFor: 'behavior' stamp: 'A 10/9/2022 08:13:42'!
+!StackTest methodsFor: 'behavior' stamp: 'A 10/10/2022 14:51:02'!
 test06GetLastElementWithoutRemovingIt
 	| stack removedElement firstElementToAdd lastElementToAdd elementTop |
 	
-	stack := Stack newEmpy.
+	stack := Stack new.
 	firstElementToAdd := #firstElement.
 	lastElementToAdd := #lastElement.
 	
@@ -100,9 +100,9 @@ Object subclass: #Stack
 pop
 	^elements removeFirst.! !
 
-!Stack methodsFor: 'basic operations' stamp: 'A 10/9/2022 07:30:37'!
-push: Element 
-	^elements addFirst: Element.
+!Stack methodsFor: 'basic operations' stamp: 'A 10/10/2022 14:56:30'!
+push: element 
+	^elements addFirst: element.
 	! !
 
 
@@ -115,8 +115,8 @@ lastElement
 	^elements at: 1.! !
 
 
-!Stack methodsFor: 'initialization' stamp: 'A 10/9/2022 08:15:27'!
-initializeEmpy
+!Stack methodsFor: 'initialization' stamp: 'A 10/10/2022 14:49:59'!
+initialize
 	elements := OrderedCollection new.
 	! !
 
@@ -126,6 +126,6 @@ initializeEmpy
 Stack class
 	instanceVariableNames: ''!
 
-!Stack class methodsFor: 'instance creation' stamp: 'A 10/9/2022 07:10:45'!
+!Stack class methodsFor: 'instance creation' stamp: 'A 10/10/2022 14:49:59'!
 newEmpy
-	^self new initializeEmpy! !
+	^self new initialize! !
