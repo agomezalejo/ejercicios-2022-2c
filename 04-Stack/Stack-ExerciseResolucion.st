@@ -62,12 +62,10 @@ test11CanNotTopWhenThereAreNoObjectsInTheLimitedStackAfterEmptying
 	
 	self canNotTopWhenThereAreNoObjectsAfterEmptying: limitedStack.! !
 
-!OOStackTest methodsFor: 'testLimitedStack' stamp: 'A 10/14/2022 18:10:10'!
+!OOStackTest methodsFor: 'testLimitedStack' stamp: 'A 10/14/2022 16:44:19'!
 test12CannotGoPastTheMaximumNumberOfItemsInTheLimitedStack
 
-	limitedStack push: 'first'.
-	limitedStack push: 'second'.
-	limitedStack push: 'third'.
+	self fillLimitedStack. 
 
 	self
 		should: [ limitedStack push: 'fourth' ]
@@ -356,8 +354,8 @@ test02IfThereAreNoMatchesNothingsIsReturned
 	self assert: (dev size = 0).
 ! !
 
-!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'A 10/14/2022 14:56:02'!
-test03IfThereAreMatchesTheyAreReturned
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'A 10/14/2022 16:58:03'!
+test03ThereAreMatchesAndItIsCaseSensitiveMatchesArereturned
 	| dev |
 	
 	dev := sentenceFinderByPrefixWithExamplesSentences find: 'Wint'.
