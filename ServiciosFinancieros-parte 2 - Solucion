@@ -1,0 +1,1795 @@
+!classDefinition: #AccountSummaryTest category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TestCase subclass: #AccountSummaryTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!AccountSummaryTest methodsFor: 'testing' stamp: 'TA 11/17/2022 12:01:17'!
+test01
+
+	"Pedir un resumen de cuenta para una cuenta vacia/sin transacciones"
+	
+	" Balance = 0 pesos " 
+	
+	| account summary |
+	
+	account := ReceptiveAccount new.
+	
+	summary := AccountSummaryReport summaryForAnAccount: account.
+	
+	self assert:( summary description) equals: self EmptyAccountSummaryDescription.! !
+
+!AccountSummaryTest methodsFor: 'testing' stamp: 'TA 11/17/2022 12:01:17'!
+test02
+
+	"Pedir un resumen de cuenta para una cuenta con un Deposito"
+	
+	"Balance = 50 pesos " 
+	
+	| account summary |
+	
+	account := ReceptiveAccount new.
+	
+	Deposit register: 50 * peso on: account.
+	
+	summary := AccountSummaryReport summaryForAnAccount: account.
+	
+	self assert:( summary description) equals: self accountWithOneDepositDescription.! !
+
+!AccountSummaryTest methodsFor: 'testing' stamp: 'TA 11/17/2022 12:01:17'!
+test03
+
+	"Pedir un resumen de cuenta para una cuenta con un Withdraw"
+	
+	"Balance = - 50 pesos " 
+	
+	| account summary |
+	
+	account := ReceptiveAccount new.
+	
+	Withdraw register: 50 * peso on: account.
+	
+	summary := AccountSummaryReport summaryForAnAccount: account.
+	
+	self assert:( summary description) equals: self accountWithOneWithdrawDescription.! !
+
+!AccountSummaryTest methodsFor: 'testing' stamp: 'TA 11/17/2022 12:01:17'!
+test04
+
+	"Pedir un resumen de cuenta para una cuenta con una transferencia entrante"
+	
+	"Balance = 100 pesos" 
+	
+	| accountToReport summary transferingAccount |
+	
+	accountToReport := ReceptiveAccount new.
+	
+	transferingAccount := ReceptiveAccount new.
+	
+	Transference register: 100 * peso from: transferingAccount to: accountToReport.
+	
+	summary := AccountSummaryReport summaryForAnAccount: accountToReport.
+	
+	self assert:( summary description) equals: self accountWithOneIncomingTransference.! !
+
+!AccountSummaryTest methodsFor: 'testing' stamp: 'TA 11/17/2022 12:01:17'!
+test05
+
+	"Pedir un resumen de cuenta para una cuenta con una transferencia saliente"
+	
+	"Balance = - 50 pesos " 
+	
+	| summary accountToReport receivingTransferAccount |
+	
+	accountToReport := ReceptiveAccount new.
+	
+	receivingTransferAccount := ReceptiveAccount new.
+	
+	Transference register: 40 * peso from: accountToReport to: receivingTransferAccount.
+	
+	summary := AccountSummaryReport summaryForAnAccount: accountToReport.
+	
+	self assert:( summary description) equals: self accountWithOneExitingTransference.
+	
+	" DESPUES DE ESTE HACER UN REFACTOR PARA VER EL TEMA DE SACAR LOS IFS DE isKindOf: "! !
+
+!AccountSummaryTest methodsFor: 'testing' stamp: 'TA 11/17/2022 12:01:17'!
+test06
+	
+	| summary account1 account2 portfolio|
+	
+	portfolio := Portfolio new.
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	
+	portfolio addAccount: account1.
+	portfolio addAccount: account2.
+	
+	Deposit register: 50 * peso on: account1.
+	Deposit register: 100 * peso on: account2.
+		
+	summary := AccountSummaryReport summaryForAnAccount: portfolio.
+	
+	self assert:( summary description) equals: self portfoliowith2deposits.! !
+
+
+!AccountSummaryTest methodsFor: 'description' stamp: 'TA 11/15/2022 21:48:35'!
+EmptyAccountSummaryDescription
+	
+	| expectedSummary |
+	
+	expectedSummary := OrderedCollection new.
+	
+	expectedSummary add: 'Balance = 0 pesos'.
+	
+	^expectedSummary ! !
+
+!AccountSummaryTest methodsFor: 'description' stamp: 'TA 11/15/2022 21:26:58'!
+accountWithOneDepositDescription
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	collection add: 'Depósito por 50 pesos'.
+	collection add: 'Balance = 50 pesos'.
+	
+	^ collection! !
+
+!AccountSummaryTest methodsFor: 'description' stamp: 'TA 11/16/2022 11:34:51'!
+accountWithOneExitingTransference
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Salida por transferencia de 40 pesos'.
+	
+	collection add: 'Balance = -40 pesos'.
+	
+	^collection ! !
+
+!AccountSummaryTest methodsFor: 'description' stamp: 'TA 11/16/2022 11:30:52'!
+accountWithOneIncomingTransference
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Entrada por transferencia de 100 pesos'.
+	
+	collection add: 'Balance = 100 pesos'.
+	
+	^collection! !
+
+!AccountSummaryTest methodsFor: 'description' stamp: 'TA 11/16/2022 11:22:26'!
+accountWithOneWithdrawDescription
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add:'Extracción por 50 pesos'.
+	
+	collection add: 'Balance = -50 pesos'.
+	
+	^ collection.! !
+
+!AccountSummaryTest methodsFor: 'description' stamp: 'TA 11/16/2022 12:07:49'!
+portfoliowith2deposits
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: ('Depósito por 50 pesos').
+	collection add: ('Depósito por 100 pesos').
+	collection add: ('Balance = 150 pesos').
+	
+	^collection.! !
+
+
+!classDefinition: #NetTransfersReportTest category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TestCase subclass: #NetTransfersReportTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!NetTransfersReportTest methodsFor: 'testing' stamp: 'TA 11/16/2022 12:24:48'!
+test01
+
+	| account report |
+	
+	account := ReceptiveAccount new.
+	
+	report := NetTransfersReport forBankAccount: account .
+	
+	self assert: report netTransferValue  equals: 0 * peso! !
+
+!NetTransfersReportTest methodsFor: 'testing' stamp: 'TA 11/16/2022 12:28:17'!
+test02
+
+	| accountReceiving  accountTransfering report |
+	
+	accountReceiving := ReceptiveAccount new.
+	accountTransfering := ReceptiveAccount new.
+	
+	Transference register: 50 * peso from: accountTransfering to: accountReceiving.
+	
+	report := NetTransfersReport forBankAccount: accountReceiving .
+	
+	self assert: report netTransferValue  equals: 50 * peso! !
+
+!NetTransfersReportTest methodsFor: 'testing' stamp: 'TA 11/16/2022 12:33:07'!
+test03
+
+	| accountReceiving  accountTransfering report |
+	
+	accountReceiving := ReceptiveAccount new.
+	accountTransfering := ReceptiveAccount new.
+	
+	Transference register: 50 * peso from: accountTransfering to: accountReceiving.
+	
+	report := NetTransfersReport forBankAccount: accountTransfering .
+	
+	self assert: report netTransferValue  equals: -50 * peso! !
+
+!NetTransfersReportTest methodsFor: 'testing' stamp: 'TA 11/16/2022 12:35:19'!
+test04
+
+	| accountReceiving  accountTransfering report |
+	
+	accountReceiving := ReceptiveAccount new.
+	accountTransfering := ReceptiveAccount new.
+	
+	Transference register: 50 * peso from: accountTransfering to: accountReceiving.
+	Transference register: 40 * peso from: accountReceiving to: accountTransfering.
+	
+	report := NetTransfersReport forBankAccount: accountReceiving .
+	
+	self assert: report netTransferValue  equals: 10 * peso! !
+
+!NetTransfersReportTest methodsFor: 'testing' stamp: 'TA 11/16/2022 12:37:05'!
+test05
+
+	| accountReceiving  accountTransfering report |
+	
+	accountReceiving := ReceptiveAccount new.
+	accountTransfering := ReceptiveAccount new.
+	
+	
+	Transference register: 50 * peso from: accountTransfering to: accountReceiving.
+	Transference register: 40 * peso from: accountReceiving to: accountTransfering.
+	
+	Deposit register: 100 * peso on: accountReceiving.
+	
+	report := NetTransfersReport forBankAccount: accountReceiving .
+	
+	self assert: report netTransferValue  equals: 10 * peso! !
+
+!NetTransfersReportTest methodsFor: 'testing' stamp: 'TA 11/16/2022 12:45:28'!
+test06
+
+	| accountReceiving  accountTransfering report |
+	
+	accountReceiving := ReceptiveAccount new.
+	accountTransfering := ReceptiveAccount new.
+	
+	
+	Transference register: 50 * peso from: accountTransfering to: accountReceiving.
+	Transference register: 40 * peso from: accountReceiving to: accountTransfering.
+	
+	Withdraw register: 10 * peso on: accountReceiving.
+	
+	report := NetTransfersReport forBankAccount: accountReceiving .
+	
+	self assert: report netTransferValue  equals: 10 * peso! !
+
+
+!classDefinition: #PortfolioDetailedTreePrinterTest category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TestCase subclass: #PortfolioDetailedTreePrinterTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:16:21'!
+test01PrintingAnEmptyPortfolio
+
+	"Imprimir un portfolio vacio"
+	
+	| portfolio treePrinter |
+	
+	portfolio := Portfolio named: 'Portfolio vacio'.
+	
+	treePrinter := PortfolioDetailedTreePrinter forPortfolio: portfolio.
+	
+	self assert: treePrinter report equals: self emptyPortfolioTree! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:16:43'!
+test02PrintingAPortfolioWithAnAccountWithNoTransactions
+
+	"Imprimir un portfolio con una cuenta vacia"
+	
+	| portfolio treePrinter johnsAccount |
+	
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'.
+	portfolio := Portfolio named: 'Portfolio familia' with: johnsAccount.
+	treePrinter := PortfolioDetailedTreePrinter forPortfolio: portfolio.
+	
+	self assert: self treeOfPortfolioWithEmptyAccount equals: treePrinter report! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:17:40'!
+test03PrintingAPortfolioWithAnAccountWithATransaction
+
+	"Imprimir un portfolio con una cuenta con un deposito"
+	
+	| portfolio treePrinter johnsAccount |
+	
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'.
+	portfolio := Portfolio named: 'Portfolio familia' with: johnsAccount.
+	
+	Deposit register: 50 * peso on: johnsAccount .
+	
+	treePrinter := PortfolioDetailedTreePrinter forPortfolio: portfolio.
+	
+	self assert: self treeOfAPortfolioWithOneDeposit equals: treePrinter report
+	
+	
+	! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:19:21'!
+test04PrintingAPortfolioWithAccountsAndItsTransactions
+
+	"Imprimir un portfolio con dos cuentas con operaciones, el balance del portoflio tendria que ser distinto"
+	
+	| portfolio treePrinter johnsAccount  angiesAccount |
+	
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'.
+	angiesAccount := ReceptiveAccount named: 'Cuenta de Angeles'. 
+	
+	portfolio := Portfolio named: 'Portfolio familia' with: johnsAccount with: angiesAccount.
+	
+	Deposit register: 50 * peso on: johnsAccount .
+	
+	Withdraw register: 10 * peso on: angiesAccount.
+	
+	treePrinter := PortfolioDetailedTreePrinter forPortfolio: portfolio.
+	
+	self assert: self treeOfAPortfolioWithTwoAccountsWithOneOperationEach equals: treePrinter report! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:20:05'!
+test05PrintingAPortfolioThatHasAPortfolioWithItsAccounts
+
+	"Imprimir un portfolio con un portfolio con cuentas vacio"
+	
+	| angiesAccount childrenPortfolio familyPortfolio johnsAccount  treePrinter|
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'. 
+	angiesAccount := ReceptiveAccount named: 'Cuenta de Angeles'. 
+	childrenPortfolio := Portfolio named: 'Portfolio de hijos' with: johnsAccount with: angiesAccount. 
+	familyPortfolio := Portfolio named: 'Portfolio de la familia' with: childrenPortfolio.
+	
+	treePrinter := PortfolioDetailedTreePrinter forPortfolio: familyPortfolio.
+	
+	self assert: self treeOfAPorfolioWithAPortfolioWithEmptyAccounts equals: treePrinter report.! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 17:04:34'!
+test06PrintingAPortfolioThatHasAPortfolioWithItsAccountsAndNoTransactions
+
+	"Imprimir un portfolio con un portfolio con cuentas vacio"
+	
+	| angiesAccount childrenPortfolio familyPortfolio johnsAccount  treePrinter |
+	
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'. 
+	angiesAccount := ReceptiveAccount named: 'Cuenta de Angeles'. 
+	childrenPortfolio := Portfolio named: 'Portfolio de hijos' with: johnsAccount with: angiesAccount. 
+	familyPortfolio := Portfolio named: 'Portfolio de la familia' with: childrenPortfolio.
+	
+	treePrinter := PortfolioDetailedTreePrinter forPortfolio: familyPortfolio.
+	
+	self assert: self treeOfAPorfolioWithAPortfolioWithEmptyAccounts equals: treePrinter report.! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:52:01'!
+test07PrintingAPortfolioThatHasAPortfolioWithItsAccountsAndTheirTransactions
+
+	"Imprimir un portfolio con un portfolio con cuentas vacio"
+	
+	| angiesAccount childrenPortfolio familyPortfolio johnsAccount  treePrinter myAccount |
+	
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'. 
+	angiesAccount := ReceptiveAccount named: 'Cuenta de Angeles'. 
+	childrenPortfolio := Portfolio named: 'Portfolio de hijos' with: johnsAccount with: angiesAccount. 
+	myAccount := ReceptiveAccount named: 'Cuenta mia'.
+	Deposit register: 100 * peso on: myAccount.
+	Withdraw  register: 50 * peso on: myAccount.
+	Deposit register: 150 * peso on: johnsAccount.
+	Transference register: 60 * peso from: johnsAccount to: angiesAccount.
+	Withdraw register: 50 * peso on: angiesAccount.
+	familyPortfolio := Portfolio named: 'Portfolio de la familia' with: myAccount with: childrenPortfolio.
+	
+	treePrinter := PortfolioDetailedTreePrinter forPortfolio: familyPortfolio.
+	
+	self assert: self treeOfAPorfolioWithAPortfolioWithAccounts equals: treePrinter report.! !
+
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 12:40:42'!
+emptyPortfolioTree
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Portfolio vacio'.
+	
+	collection add: self emptySpace , 'Balance = 0 pesos'.
+	
+	^collection! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 12:40:42'!
+emptySpace
+
+	^ '    '! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 17:23:15'!
+treeOfAPorfolioWithAPortfolioWithAccounts
+	
+	|  collection |
+	
+	collection := OrderedCollection new.
+	
+	"Deposit register: 100 * peso on: myAccount.
+	Withdraw  register: 50 * peso on: myAccount.
+	Deposit register: 150 * peso on: johnsAccount.
+	Transference register: 60 * peso from: johnsAccount to: angiesAccount.
+	Withdraw register: 50 * peso on: angiesAccount."
+	
+	collection add: 'Portfolio de la familia'.
+	collection add: (self emptySpace , 'Cuenta mia').
+	collection add: (self emptySpace , self emptySpace , 'Depósito por 100 pesos').
+	collection add: (self emptySpace , self emptySpace , 'Extracción por 50 pesos').
+	collection add: (self emptySpace , self emptySpace , 'Balance = 50 pesos').
+	collection add: (self emptySpace , 'Portfolio de hijos').
+	collection add: (self emptySpace , self emptySpace , 'Cuenta de Juan').
+	collection add: (self emptySpace , self emptySpace , self emptySpace , 'Depósito por 150 pesos').
+	collection add: (self emptySpace , self emptySpace , self emptySpace , 'Salida por transferencia de 60 pesos').
+	collection add: (self emptySpace , self emptySpace , self emptySpace , 'Balance = 90 pesos').
+	collection add: (self emptySpace , self emptySpace , 'Cuenta de Angeles').
+	collection add: (self emptySpace , self emptySpace , self emptySpace , 'Entrada por transferencia de 60 pesos').
+	collection add: (self emptySpace , self emptySpace , self emptySpace , 'Extracción por 50 pesos').
+	collection add: (self emptySpace , self emptySpace , self emptySpace , 'Balance = 10 pesos').
+	collection add: (self emptySpace , self emptySpace , 'Balance = 100 pesos').
+	collection add: (self emptySpace , 'Balance = 150 pesos').
+	
+	^collection
+	! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 15:49:32'!
+treeOfAPorfolioWithAPortfolioWithEmptyAccounts
+		
+	|  collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Portfolio de la familia'.
+	collection add: (self emptySpace , 'Portfolio de hijos').
+	collection add: (self emptySpace , self emptySpace , 'Cuenta de Juan').
+	collection add: (self emptySpace , self emptySpace , self emptySpace , 'Balance = 0 pesos').
+	collection add: (self emptySpace , self emptySpace , 'Cuenta de Angeles').
+	collection add: (self emptySpace , self emptySpace , self emptySpace , 'Balance = 0 pesos').
+	collection add: (self emptySpace , self emptySpace , 'Balance = 0 pesos').
+	collection add: (self emptySpace , 'Balance = 0 pesos').
+	
+	
+	^collection! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 13:17:46'!
+treeOfAPortfolioWithOneDeposit
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Portfolio familia'.
+	
+	collection add: (self emptySpace), 'Cuenta de Juan'.
+	
+	collection add: (self emptySpace ) , (self emptySpace) , 'Depósito por 50 pesos'.
+	
+	collection add: (self emptySpace ) , (self emptySpace ), 'Balance = 50 pesos'.
+	
+	collection add: (self emptySpace ), 'Balance = 50 pesos'.
+	
+	^collection ! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 13:27:02'!
+treeOfAPortfolioWithTwoAccountsWithOneOperationEach
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Portfolio familia'.
+	collection add: (self emptySpace), 'Cuenta de Juan'.
+	collection add: (self emptySpace ) , (self emptySpace) , 'Depósito por 50 pesos'.
+	collection add: (self emptySpace ) , (self emptySpace ), 'Balance = 50 pesos'.
+	collection add: (self emptySpace ), 'Cuenta de Angeles'.
+	collection add: (self emptySpace ), (self emptySpace ), 'Extracción por 10 pesos'.
+	collection add: (self emptySpace ), (self emptySpace ), 'Balance = -10 pesos'.
+	
+	collection add: (self emptySpace ), 'Balance = 40 pesos'.
+	
+	^collection! !
+
+!PortfolioDetailedTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 12:48:06'!
+treeOfPortfolioWithEmptyAccount
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Portfolio familia'.
+	
+	collection add: (self emptySpace), 'Cuenta de Juan'.
+	
+	collection add: (self emptySpace ) , (self emptySpace ), 'Balance = 0 pesos'.
+	
+	collection add: (self emptySpace ), 'Balance = 0 pesos'.
+	
+	^collection ! !
+
+
+!classDefinition: #PortfolioTest category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TestCase subclass: #PortfolioTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!PortfolioTest methodsFor: 'testing' stamp: 'A 11/11/2022 17:09:14'!
+test01TheBeginningBalanceOfAPortfolioIsZero
+	
+	| portfolio |
+	
+	portfolio := Portfolio new.
+	
+	self assert: 0 equals: portfolio balance.! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'A 11/11/2022 17:12:32'!
+test02APortfolioRecordsTheBalanceOfAnAccountThatComprisesIt
+	
+	| portfolio account |
+	
+	portfolio := Portfolio new.
+	
+	account := ReceptiveAccount new.
+	
+	Deposit register: 100 * peso on: account.
+	
+	portfolio addAccount: account.
+	
+	self assert: 100 * peso equals: portfolio balance.! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'A 11/11/2022 17:14:11'!
+test03TheBalanceOfThePortfolioIsThatOfTheAccountsThatComposeIt
+	
+	| portfolio account1 account2 |
+	
+	portfolio := Portfolio new.
+	
+	account1 := ReceptiveAccount new.
+	
+	account2:= ReceptiveAccount new.
+	
+	Deposit register: 100 * peso on: account1.
+	
+	Deposit register: 200 * peso on: account2.
+	
+	portfolio addAccount: account1.
+	
+	portfolio addAccount: account2.
+	
+	self assert: 300 * peso equals: portfolio balance.! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'A 11/11/2022 17:17:07'!
+test04APortfolioDoesNotRecordTheDepositOfAnAccountThatIsNotPartOfIt
+	
+	| portfolio  account aDeposit|
+	
+	account := ReceptiveAccount new.
+	
+	aDeposit := Deposit register: 100 * peso on: account.
+	
+	portfolio := Portfolio new.
+	
+	self deny: (portfolio hasRegistered: aDeposit).! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'A 11/11/2022 17:18:11'!
+test05APortfolioRecordsTheDepositOfAnAccountThatComposesIt
+	
+	| portfolio  account aDeposit|
+	
+	account := ReceptiveAccount new.
+	
+	aDeposit := Deposit register: 100 * peso on: account.
+	
+	portfolio := Portfolio new.
+	
+	portfolio addAccount: account .
+	
+	self assert: (portfolio hasRegistered: aDeposit).! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'A 11/11/2022 17:19:44'!
+test06PortfolioDoesNotRecordtransactions
+	
+	| portfolio |
+	
+	portfolio := Portfolio new.
+	
+	self assert: OrderedCollection new equals: portfolio transactions.! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'A 11/11/2022 17:21:58'!
+test07PortfolioReturnsTheTransactionsOfTheAccountsThatCompriseIt
+	
+	| portfolio account1 account2 transactionList|
+	
+	portfolio := Portfolio new.
+	
+	account1 := ReceptiveAccount new.
+	
+	account2:= ReceptiveAccount new.
+	
+	transactionList := OrderedCollection new.
+	
+	transactionList add: (Deposit register: 100 * peso on: account1).
+	
+	transactionList add: (Deposit register: 200 * peso on: account2).
+	
+	portfolio addAccount: account1.
+	
+	portfolio addAccount: account2.
+	
+	self assert: transactionList equals: portfolio transactions.! !
+
+
+!classDefinition: #PortfolioTreePrinterTest category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TestCase subclass: #PortfolioTreePrinterTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!PortfolioTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:32:45'!
+test01PrintingAnEmptyPortfolio
+
+	"Imprimir un arbol con un portfolio vacio ?"
+	
+	| portfolio treePrinter |
+	
+	portfolio:= Portfolio named: 'Portfolio vacio'.
+	
+	treePrinter := PortfolioTreePrinter forPorfolio: portfolio.
+	
+	self assert: treePrinter report equals: self treeOfEmptyPortfolio.! !
+
+!PortfolioTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:33:27'!
+test02PrintingAPortfolioWithAnAccount
+
+	"Imprimir un arbol con un portfolio con una cuenta"
+	
+	| portfolio treePrinter johnsAccount |
+	
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'. 
+	
+	portfolio:= Portfolio named: 'Portfolio familia' with: johnsAccount .
+	
+	treePrinter := PortfolioTreePrinter forPorfolio: portfolio.
+	
+	self assert: treePrinter report equals: self portfolioTreeWithOneChildrenAccount.! !
+
+!PortfolioTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:34:03'!
+test03PrintingAPortfolioContainingAnEmptyPortfolio
+
+	"Imprimir un arbol con un portfolio con un portfolio vacio"
+	
+	| portfolio treePrinter portfolioChildren |
+	
+	portfolioChildren := Portfolio named: 'Portfolio hijos'. 
+	
+	portfolio:= Portfolio named: 'Portfolio familia' with: portfolioChildren .
+	
+	treePrinter := PortfolioTreePrinter forPorfolio: portfolio.
+	
+	self assert: treePrinter report equals: self portfolioTreeWithOneEmptyPortfolioAsChildren.! !
+
+!PortfolioTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:34:41'!
+test04PrintingAPortofolioContainingAPortfolioWhichContainsAnAccount
+
+	"Imprimir un arbol con un portfolio con un portfolio con al menos una cuenta"
+	
+	| portfolio treePrinter portfolioChildren johnsAccount|
+	
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'. 
+	
+	portfolioChildren := Portfolio named: 'Portfolio hijos' with: johnsAccount. 
+	
+	portfolio:= Portfolio named: 'Portfolio familia' with: portfolioChildren .
+	
+	treePrinter := PortfolioTreePrinter forPorfolio: portfolio.
+	
+	self assert: treePrinter report equals: self portfolioTreeWithOnePortfolioChildrenThatHasAnAccount.! !
+
+!PortfolioTreePrinterTest methodsFor: 'testing' stamp: 'TA 11/18/2022 16:40:51'!
+test05PrintingAPortoflioContainingAnAccountAndAPortfolio
+
+	"Imprimir un arbol con un portfolio con un portfolio con al menos una cuenta"
+	
+	| treePrinter johnsAccount angiesAccount childrenPortfolio familyPortfolio myAccount |
+	
+	johnsAccount := ReceptiveAccount named: 'Cuenta de Juan'. 
+	angiesAccount := ReceptiveAccount named: 'Cuenta de Angeles'. 
+	childrenPortfolio := Portfolio named: 'Portfolio de hijos' with: johnsAccount with: angiesAccount. 
+	myAccount := ReceptiveAccount named: 'Cuenta mia'. 
+	familyPortfolio := Portfolio named: 'Portfolio de la familia' with: myAccount with: childrenPortfolio.
+	
+	treePrinter := PortfolioTreePrinter forPorfolio: familyPortfolio.
+	
+	self assert: treePrinter report equals: self portfolioWithAnAccountAndAPortfolio.! !
+
+
+!PortfolioTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 16:45:05'!
+emptySpace
+	
+	^'    '! !
+
+!PortfolioTreePrinterTest methodsFor: 'description' stamp: 'TA 11/17/2022 20:21:33'!
+portfolioTreeWithOneChildrenAccount
+	
+	| collection |
+	
+	collection:= OrderedCollection new.
+	
+	collection add: 'Portfolio familia'.
+	
+	collection add: '    Cuenta de Juan'.
+	
+	^collection.! !
+
+!PortfolioTreePrinterTest methodsFor: 'description' stamp: 'TA 11/17/2022 20:45:35'!
+portfolioTreeWithOneEmptyPortfolioAsChildren
+	
+	
+	| collection |
+	
+	collection:= OrderedCollection new.
+	
+	collection add: 'Portfolio familia'.
+	
+	collection add: '    Portfolio hijos'.
+	
+	^collection ! !
+
+!PortfolioTreePrinterTest methodsFor: 'description' stamp: 'TA 11/17/2022 20:50:49'!
+portfolioTreeWithOnePortfolioChildrenThatHasAnAccount
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Portfolio familia'.
+	collection add: '    Portfolio hijos'.
+	collection add: '        Cuenta de Juan'.
+	
+	^collection.! !
+
+!PortfolioTreePrinterTest methodsFor: 'description' stamp: 'TA 11/18/2022 16:46:56'!
+portfolioWithAnAccountAndAPortfolio
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	
+	collection add: 'Portfolio de la familia'.
+	collection add: self emptySpace , 'Cuenta mia'.
+	collection add: self emptySpace , 'Portfolio de hijos'.
+	collection add: self emptySpace , self emptySpace , 'Cuenta de Juan'.
+	collection add: self emptySpace , self emptySpace , 'Cuenta de Angeles'.
+	
+	^collection.! !
+
+!PortfolioTreePrinterTest methodsFor: 'description' stamp: 'TA 11/17/2022 20:12:35'!
+treeOfEmptyPortfolio
+	
+	| collection |
+	
+	collection := OrderedCollection new.
+	collection add: 'Portfolio vacio'.
+	
+	^ collection.! !
+
+
+!classDefinition: #ReceptiveAccountTest category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TestCase subclass: #ReceptiveAccountTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:43'!
+test01ReceptiveAccountHaveZeroAsBalanceWhenCreated 
+
+	| account |
+	
+	account := ReceptiveAccount new.
+
+	self assert: 0 equals: account balance
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:14:20'!
+test02DepositIncreasesBalanceOnTransactionValue 
+
+	| account |
+	
+	account := ReceptiveAccount  new.
+	Deposit register: 100 * peso on: account.
+		
+	self assert: 100 * peso equals: account balance
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:14:24'!
+test03WithdrawDecreasesBalanceOnTransactionValue 
+
+	| account |
+	
+	account := ReceptiveAccount new.
+	Deposit register: 100 * peso on: account.
+	Withdraw register: 50 * peso on: account.
+		
+	self assert: 50 * peso equals: account balance
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:14'!
+test04WithdrawValueMustBePositive 
+
+	| account withdrawValue |
+	
+	account := ReceptiveAccount new.
+	withdrawValue := 50 * peso.
+	
+	self assert: withdrawValue equals: (Withdraw register: withdrawValue on: account) value
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:10:22'!
+test05ReceptiveAccountKnowsRegisteredTransactions 
+
+	| account deposit withdraw |
+	
+	account := ReceptiveAccount new.
+	deposit := Deposit register: 100 * peso on: account.
+	withdraw := Withdraw register: 50 * peso on: account.
+		
+	self assert: (account hasRegistered: deposit).
+	self assert: (account hasRegistered: withdraw).
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:12:14'!
+test06ReceptiveAccountDoNotKnowNotRegisteredTransactions
+
+	| account deposit withdraw |
+	
+	account := ReceptiveAccount new.
+	deposit :=  Deposit for: 100 * peso.
+	withdraw := Withdraw for: 50 * peso.
+		
+	self deny: (account hasRegistered: deposit).
+	self deny: (account hasRegistered: withdraw).
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'LL 7/1/2021 03:12:23'!
+test07AccountKnowsItsTransactions 
+
+	| account deposit |
+	
+	account := ReceptiveAccount new.
+	
+	deposit := Deposit register: 50 * peso on: account.
+		
+	self assert: 1 equals: account transactions size.
+	self assert: (account transactions includes: deposit).
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'A 11/11/2022 17:04:25'!
+test08ATransferDeductsTheBalanceOfTheOriginAccountAndIncreasesThatOfTheDestinationAccount
+
+	| accountOrigin accountDestiny |
+	
+	accountOrigin := ReceptiveAccount new.
+	accountDestiny := ReceptiveAccount new.
+	Deposit register: 100 * peso on: accountOrigin.
+	Transference register: 50 * peso from: accountOrigin to: accountDestiny.
+		
+	self assert: 50 * peso equals: accountOrigin balance.
+	self assert: 50 * peso equals: accountDestiny balance.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'A 11/11/2022 17:06:23'!
+test09ATransferRegistersItsValue
+
+	| accountOrigin accountDestiny aTransference|
+	
+	accountOrigin := ReceptiveAccount new.
+	accountDestiny := ReceptiveAccount new.
+	Deposit register: 100 * peso on: accountOrigin.
+	aTransference := Transference register: 50 * peso from: accountOrigin to: accountDestiny.
+		
+	self assert: 50* peso equals: aTransference value.
+! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'A 11/11/2022 17:07:58'!
+test10TheLegsOfTheTransferKnowTheirCounterpart
+
+	| accountOrigin accountDestiny aTransference aWithdrawLeg aDepositLeg |
+	
+	accountOrigin := ReceptiveAccount new.
+	accountDestiny := ReceptiveAccount new.
+	Deposit register: 100 * peso on: accountOrigin.
+	aTransference := Transference register: 50 * peso from: accountOrigin to: accountDestiny.
+	aWithdrawLeg := aTransference withDrawLeg.
+	aDepositLeg := aTransference depositLeg. 
+	
+	self assert:(aWithdrawLeg counterPart ) equals: (aDepositLeg).
+	self assert:(aDepositLeg counterPart ) equals: (aWithdrawLeg).! !
+
+
+!classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Object subclass: #AccountTransaction
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
+value 
+
+	self subclassResponsibility ! !
+
+!AccountTransaction methodsFor: 'value' stamp: 'TA 11/10/2022 18:44:04'!
+valueForBalance: totalBalance
+
+	self  subclassResponsibility.! !
+
+
+!AccountTransaction methodsFor: 'description' stamp: 'TA 11/16/2022 11:51:35'!
+stringForAccountSummary: aSummary
+
+	self subclassResponsibility.! !
+
+
+!AccountTransaction methodsFor: 'report' stamp: 'TA 11/16/2022 12:41:44'!
+netTransferReportValue: transferenceValue 
+	self subclassResponsibility! !
+
+!AccountTransaction methodsFor: 'report' stamp: 'TA 11/17/2022 12:02:27'!
+reportOn: aReport
+
+	self subclassResponsibility.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountTransaction class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+AccountTransaction class
+	instanceVariableNames: ''!
+
+!AccountTransaction class methodsFor: 'instance creation' stamp: 'NR 10/17/2019 03:22:00'!
+register: aValue on: account
+
+	| transaction |
+	
+	transaction := self for: aValue.
+	account register: transaction.
+		
+	^ transaction! !
+
+
+!classDefinition: #Deposit category: 'ServiciosFinancieros-Ejercicio 5.0'!
+AccountTransaction subclass: #Deposit
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
+initializeFor: aValue
+
+	value := aValue ! !
+
+
+!Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+value
+
+	^ value! !
+
+!Deposit methodsFor: 'value' stamp: 'TA 11/10/2022 18:44:30'!
+valueForBalance: totalBalance
+	
+	^ totalBalance + self value.! !
+
+
+!Deposit methodsFor: 'accessing' stamp: 'A 11/11/2022 15:45:54'!
+getCounterLegFrom: aTransfer
+	^ aTransfer withDrawLeg.! !
+
+
+!Deposit methodsFor: 'report' stamp: 'TA 11/16/2022 12:43:55'!
+netTransferReportValue: transferenceValue 
+	
+	^transferenceValue ! !
+
+!Deposit methodsFor: 'report' stamp: 'TA 11/17/2022 12:14:47'!
+reportOn: aReport
+
+	^aReport reportOnADeposit: self.! !
+
+!Deposit methodsFor: 'report' stamp: 'TA 11/17/2022 12:05:51'!
+stringForAccountSummary: summary 
+	
+	summary add: 'Depósito por ', ((self value) amount) asString , ' pesos'! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Deposit class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Deposit class
+	instanceVariableNames: ''!
+
+!Deposit class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+for: aValue
+
+	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #TransferenceTransaction category: 'ServiciosFinancieros-Ejercicio 5.0'!
+AccountTransaction subclass: #TransferenceTransaction
+	instanceVariableNames: 'transfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!TransferenceTransaction methodsFor: 'initialization' stamp: 'A 11/11/2022 16:32:20'!
+initializeOf: aTransfer
+
+	transfer := aTransfer.! !
+
+
+!TransferenceTransaction methodsFor: 'description' stamp: 'TA 11/16/2022 11:57:03'!
+stringForAccountSummary: summary 
+
+	self subclassResponsibility ! !
+
+
+!TransferenceTransaction methodsFor: 'accessing' stamp: 'A 11/11/2022 16:32:31'!
+counterPart
+
+	self subclassResponsibility.! !
+
+!TransferenceTransaction methodsFor: 'accessing' stamp: 'A 11/11/2022 16:32:55'!
+value
+
+	^transfer value! !
+
+!TransferenceTransaction methodsFor: 'accessing' stamp: 'A 11/11/2022 16:38:30'!
+valueForBalance: aBalance
+
+	^self subclassResponsibility. ! !
+
+
+!TransferenceTransaction methodsFor: 'report' stamp: 'TA 11/16/2022 12:42:04'!
+netTransferReportValue: transferenceValue 
+	self subclassResponsibility ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferenceTransaction class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TransferenceTransaction class
+	instanceVariableNames: ''!
+
+!TransferenceTransaction class methodsFor: 'as yet unclassified' stamp: 'A 11/11/2022 16:31:25'!
+of: aTransfer inAccount: anAccount
+	| transferLeg |
+	
+	transferLeg := self new initializeOf: aTransfer.
+	anAccount register: transferLeg.
+		
+	^transferLeg! !
+
+
+!classDefinition: #TransferenceDepositLeg category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TransferenceTransaction subclass: #TransferenceDepositLeg
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!TransferenceDepositLeg methodsFor: 'accessing' stamp: 'A 11/11/2022 16:36:19'!
+counterPart
+
+	^transfer withDrawLeg. ! !
+
+!TransferenceDepositLeg methodsFor: 'accessing' stamp: 'A 11/11/2022 16:38:01'!
+valueForBalance: aBalance
+
+	^aBalance + self value! !
+
+
+!TransferenceDepositLeg methodsFor: 'description' stamp: 'TA 11/16/2022 11:54:57'!
+stringForAccountSummary: summary 
+
+	summary add: ('Entrada por transferencia de ', ((self value) amount) asString , ' pesos')! !
+
+
+!TransferenceDepositLeg methodsFor: 'report' stamp: 'TA 11/16/2022 12:42:28'!
+netTransferReportValue: transferenceValue 
+	
+	^ self valueForBalance: transferenceValue.! !
+
+!TransferenceDepositLeg methodsFor: 'report' stamp: 'TA 11/17/2022 12:17:38'!
+reportOn: aReport
+
+	^aReport reportOnATransferenceDepositLeg: self.! !
+
+
+!classDefinition: #TransferenceWithdrawLeg category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TransferenceTransaction subclass: #TransferenceWithdrawLeg
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!TransferenceWithdrawLeg methodsFor: 'accessing' stamp: 'A 11/11/2022 16:36:39'!
+counterPart
+
+	^transfer depositLeg. ! !
+
+!TransferenceWithdrawLeg methodsFor: 'accessing' stamp: 'A 11/11/2022 16:38:13'!
+valueForBalance: aBalance
+
+	^aBalance - self value! !
+
+
+!TransferenceWithdrawLeg methodsFor: 'description' stamp: 'TA 11/16/2022 11:55:43'!
+stringForAccountSummary: summary 
+	
+	summary add: ('Salida por transferencia de ', ((self value) amount) asString , ' pesos')! !
+
+
+!TransferenceWithdrawLeg methodsFor: 'report' stamp: 'TA 11/16/2022 12:43:20'!
+netTransferReportValue: transferenceValue 
+	
+	^ self valueForBalance: transferenceValue.! !
+
+!TransferenceWithdrawLeg methodsFor: 'report' stamp: 'TA 11/17/2022 12:24:07'!
+reportOn: aReport
+
+	^ aReport reportOnATransferenceWithdrawLeg: self.! !
+
+
+!classDefinition: #Withdraw category: 'ServiciosFinancieros-Ejercicio 5.0'!
+AccountTransaction subclass: #Withdraw
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!Withdraw methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:46'!
+initializeFor: aValue
+
+	value := aValue ! !
+
+
+!Withdraw methodsFor: 'value' stamp: 'TA 11/7/2022 17:03:25'!
+value
+
+	^ value! !
+
+!Withdraw methodsFor: 'value' stamp: 'TA 11/10/2022 18:44:48'!
+valueForBalance: totalBalance
+	^totalBalance - self value.! !
+
+
+!Withdraw methodsFor: 'accessing' stamp: 'A 11/11/2022 15:46:16'!
+getCounterLegFrom: aTransfer
+	^ aTransfer depositLeg.! !
+
+
+!Withdraw methodsFor: 'description' stamp: 'TA 11/17/2022 12:16:38'!
+stringForAccountSummary: summary 
+	
+	 summary add:  ('Extracción por ', ((self value) amount) asString , ' pesos')! !
+
+
+!Withdraw methodsFor: 'report' stamp: 'TA 11/16/2022 12:45:46'!
+netTransferReportValue: transferenceValue 
+	
+	^transferenceValue.! !
+
+!Withdraw methodsFor: 'report' stamp: 'TA 11/17/2022 12:17:05'!
+reportOn: aReport
+
+	^aReport reportOnAWithdraw: self.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Withdraw class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Withdraw class
+	instanceVariableNames: ''!
+
+!Withdraw class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:33'!
+for: aValue
+
+	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #BankAccount category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Object subclass: #BankAccount
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!BankAccount methodsFor: 'main protocol' stamp: 'TA 11/8/2022 21:18:12'!
+balance
+	self subclassResponsibility ! !
+
+!BankAccount methodsFor: 'main protocol' stamp: 'TA 11/8/2022 21:18:44'!
+hasRegistered: aTransaction
+
+	self subclassResponsibility ! !
+
+!BankAccount methodsFor: 'main protocol' stamp: 'TA 11/8/2022 21:18:25'!
+transactions
+	
+	self subclassResponsibility ! !
+
+
+!classDefinition: #Portfolio category: 'ServiciosFinancieros-Ejercicio 5.0'!
+BankAccount subclass: #Portfolio
+	instanceVariableNames: 'accounts string name'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!Portfolio methodsFor: 'value' stamp: 'TA 11/8/2022 20:40:16'!
+balance
+	^ accounts sum: [:aAccount | aAccount balance ] ifEmpty: [^0].! !
+
+
+!Portfolio methodsFor: 'adding' stamp: 'TA 11/8/2022 20:39:09'!
+addAccount: aReceptiveAccount 
+	accounts add: aReceptiveAccount .! !
+
+
+!Portfolio methodsFor: 'initialization' stamp: 'TA 11/8/2022 20:38:39'!
+initialize
+
+	accounts := OrderedCollection new.! !
+
+!Portfolio methodsFor: 'initialization' stamp: 'TA 11/17/2022 20:09:36'!
+initializeNamed: aName
+
+	name := aName.! !
+
+
+!Portfolio methodsFor: 'verification' stamp: 'TA 11/8/2022 20:51:33'!
+hasRegistered: aTransaction 
+	accounts do: [:anAccount| (anAccount hasRegistered: aTransaction) ifTrue: [^true] ].
+	^false! !
+
+
+!Portfolio methodsFor: 'enumarating' stamp: 'TA 11/8/2022 21:04:17'!
+transactions
+	
+	| transactionList |
+	
+	transactionList := OrderedCollection new.
+	
+	accounts do: [:anAccount | transactionList addAllLast: (anAccount transactions) ].
+	
+	^ transactionList ! !
+
+
+!Portfolio methodsFor: 'description' stamp: 'TA 11/18/2022 15:37:38'!
+reportOn: aReport 
+
+	aReport reportPortfolio: self .! !
+
+
+!Portfolio methodsFor: 'accesing' stamp: 'TA 11/17/2022 20:38:11'!
+accountName
+	
+	^ name! !
+
+!Portfolio methodsFor: 'accesing' stamp: 'TA 11/17/2022 20:37:01'!
+childrenAccounts
+	
+	^accounts.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Portfolio class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Portfolio class
+	instanceVariableNames: ''!
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'TA 11/17/2022 20:08:50'!
+named: aString 
+
+	^self new initializeNamed: aString ! !
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'TA 11/17/2022 20:18:53'!
+named: aString with: aBankAccount 
+	
+	| portfolio |
+	
+	 portfolio := self new initializeNamed: aString. 
+	portfolio addAccount: aBankAccount.
+	
+	^portfolio.! !
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'TA 11/18/2022 13:23:46'!
+named: aString with: aBankAccount with: aBankAccount2 
+	
+	| portfolio |
+	
+	 portfolio := self new initializeNamed: aString. 
+	portfolio addAccount: aBankAccount.
+	portfolio addAccount: aBankAccount2.
+	
+	^portfolio.! !
+
+
+!classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio 5.0'!
+BankAccount subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions name'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'NR 10/17/2019 15:06:56'!
+initialize
+
+	transactions := OrderedCollection new.! !
+
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'TA 11/17/2022 20:15:49'!
+initializeNamed: aName 
+	
+	name := aName.! !
+
+
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'TA 11/16/2022 11:18:11'!
+balance
+
+	|  totalBalance |
+	
+	totalBalance := 0 * peso.
+	
+	transactions do: [ :aTransaction | 
+		totalBalance := aTransaction valueForBalance: totalBalance
+	].
+	
+	^ totalBalance ! !
+
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'NR 10/17/2019 03:28:43'!
+hasRegistered: aTransaction
+
+	^ transactions includes: aTransaction 
+! !
+
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+register: aTransaction
+
+	transactions add: aTransaction 
+! !
+
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+transactions 
+
+	^ transactions copy! !
+
+
+!ReceptiveAccount methodsFor: 'description' stamp: 'TA 11/18/2022 15:37:49'!
+reportOn: aReport 
+
+	aReport reportReceptiveAccount: self.! !
+
+
+!ReceptiveAccount methodsFor: 'accesing' stamp: 'TA 11/17/2022 20:38:31'!
+accountName
+	
+	^ name! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ReceptiveAccount class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+ReceptiveAccount class
+	instanceVariableNames: ''!
+
+!ReceptiveAccount class methodsFor: 'instance creation' stamp: 'TA 11/17/2022 20:15:39'!
+named: aName 
+
+	^self new initializeNamed: aName ! !
+
+
+!classDefinition: #ReportAccountTransaction category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Object subclass: #ReportAccountTransaction
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!ReportAccountTransaction methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:10:04'!
+reportOnADeposit: aDeposit
+	
+	self subclassResponsibility.! !
+
+!ReportAccountTransaction methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:16:02'!
+reportOnATransferenceDepositLeg: aDepositLeg
+	
+	self subclassResponsibility.! !
+
+!ReportAccountTransaction methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:15:49'!
+reportOnATransferenceWithdrawLeg: aWithdrawLeg
+	
+	self subclassResponsibility.! !
+
+!ReportAccountTransaction methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:18:59'!
+reportOnAWithdraw: aWithdraw
+	
+	self subclassResponsibility.! !
+
+
+!classDefinition: #AccountSummaryReport category: 'ServiciosFinancieros-Ejercicio 5.0'!
+ReportAccountTransaction subclass: #AccountSummaryReport
+	instanceVariableNames: 'account currentSummary'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!AccountSummaryReport methodsFor: 'description' stamp: 'TA 11/18/2022 15:39:50'!
+description
+
+	| transactions summary|
+	
+	transactions:= account transactions.
+	
+	summary := OrderedCollection new.
+	
+	transactions do: [ :aTransaction | summary add: (aTransaction reportOn: self). ].
+	
+	summary add: ('Balance = ', ((account balance) amount) asString , ' pesos').
+	^ summary.! !
+
+
+!AccountSummaryReport methodsFor: 'initialization' stamp: 'TA 11/17/2022 12:11:53'!
+initializeWithAccount: anAccount 
+
+	account := anAccount.! !
+
+
+!AccountSummaryReport methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:13:45'!
+reportOnADeposit: aDeposit
+	
+	^ ('Depósito por ', ((aDeposit value) amount) asString , ' pesos')! !
+
+!AccountSummaryReport methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:22:01'!
+reportOnATransferenceDepositLeg: aDepositLeg
+	
+	^ ('Entrada por transferencia de ', ((aDepositLeg value) amount) asString , ' pesos')! !
+
+!AccountSummaryReport methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:22:29'!
+reportOnATransferenceWithdrawLeg: aWithdrawLeg
+	
+	^ ('Salida por transferencia de ', ((aWithdrawLeg value) amount) asString , ' pesos')! !
+
+!AccountSummaryReport methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:20:59'!
+reportOnAWithdraw: aWithdraw
+	
+	^ ('Extracción por ', ((aWithdraw value) amount) asString , ' pesos')! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountSummaryReport class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+AccountSummaryReport class
+	instanceVariableNames: ''!
+
+!AccountSummaryReport class methodsFor: 'creation' stamp: 'TA 11/15/2022 21:27:47'!
+summaryForAnAccount: account 
+	^self new initializeWithAccount: account.! !
+
+
+!classDefinition: #NetTransfersReport category: 'ServiciosFinancieros-Ejercicio 5.0'!
+ReportAccountTransaction subclass: #NetTransfersReport
+	instanceVariableNames: 'account bankAccount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!NetTransfersReport methodsFor: 'intialization' stamp: 'TA 11/16/2022 12:26:03'!
+initializeForBankAccount: aBankAccount 
+	
+	bankAccount := aBankAccount.! !
+
+
+!NetTransfersReport methodsFor: 'reporting' stamp: 'TA 11/18/2022 15:39:20'!
+netTransferValue
+	
+	| transferenceValue  transacctions |
+	
+	transferenceValue := 0 * peso.
+	
+	transacctions := bankAccount transactions.
+	
+	transacctions do: [ :aTransaction | transferenceValue :=  transferenceValue + (aTransaction reportOn: self). ].
+			
+	^ transferenceValue.
+	
+	! !
+
+!NetTransfersReport methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:27:47'!
+reportOnADeposit: aDeposit
+	
+	^0! !
+
+!NetTransfersReport methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:28:35'!
+reportOnATransferenceDepositLeg: aDepositLeg
+
+	^ aDepositLeg value
+! !
+
+!NetTransfersReport methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:29:17'!
+reportOnATransferenceWithdrawLeg: aWithdrawLeg
+	
+	^ (aWithdrawLeg value negated)! !
+
+!NetTransfersReport methodsFor: 'reporting' stamp: 'TA 11/17/2022 12:28:04'!
+reportOnAWithdraw: aWithdraw
+	
+	^0! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'NetTransfersReport class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+NetTransfersReport class
+	instanceVariableNames: ''!
+
+!NetTransfersReport class methodsFor: 'instance creation' stamp: 'TA 11/16/2022 12:25:43'!
+forBankAccount: aBankAccount
+	
+	^self new initializeForBankAccount: aBankAccount ! !
+
+
+!classDefinition: #ReportBankAccount category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Object subclass: #ReportBankAccount
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!ReportBankAccount methodsFor: 'printing' stamp: 'TA 11/18/2022 15:30:03'!
+report
+	self subclassResponsibility.! !
+
+!ReportBankAccount methodsFor: 'printing' stamp: 'TA 11/18/2022 15:33:57'!
+reportPortfolio: aPortfolio 
+
+	self subclassResponsibility ! !
+
+!ReportBankAccount methodsFor: 'printing' stamp: 'TA 11/18/2022 15:34:13'!
+reportReceptiveAccount: aReceptiveAccount 
+
+	self subclassResponsibility ! !
+
+
+!classDefinition: #TreePrinter category: 'ServiciosFinancieros-Ejercicio 5.0'!
+ReportBankAccount subclass: #TreePrinter
+	instanceVariableNames: 'finalCollection numberOfSpaces'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!TreePrinter methodsFor: 'printing private' stamp: 'TA 11/18/2022 15:47:03'!
+getTreeIndentation 
+	
+	| totalSpaces |
+	
+	totalSpaces := ''.
+	
+	(1 to: numberOfSpaces ) do: [:aInterval | totalSpaces := totalSpaces , '    '].
+	
+	^totalSpaces ! !
+
+
+!classDefinition: #PortfolioDetailedTreePrinter category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TreePrinter subclass: #PortfolioDetailedTreePrinter
+	instanceVariableNames: 'portfolio finalCollection4 numberOfSpaces4'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!PortfolioDetailedTreePrinter methodsFor: 'intialization' stamp: 'TA 11/18/2022 15:11:31'!
+initializeForPortfolio: aPortfolio 
+	
+	portfolio := aPortfolio.! !
+
+
+!PortfolioDetailedTreePrinter methodsFor: 'printing' stamp: 'TA 11/18/2022 16:59:36'!
+report
+	
+	| accounts |
+	
+	finalCollection:= OrderedCollection new.
+	numberOfSpaces := 1.
+	
+	finalCollection add: portfolio accountName.
+	
+	accounts := portfolio childrenAccounts.
+	
+	accounts do:[ :aBankAccount |  aBankAccount reportOn: self ].
+	
+	finalCollection add: self getTreeIndentation , 'Balance = ', ((portfolio balance) amount) asString , ' pesos'.
+		
+	^ finalCollection! !
+
+!PortfolioDetailedTreePrinter methodsFor: 'printing' stamp: 'TA 11/18/2022 17:11:12'!
+reportPortfolio: aPortfolio 
+
+	| accounts |
+	finalCollection add: (self getTreeIndentation) , aPortfolio accountName.
+	
+	accounts := aPortfolio childrenAccounts.
+	numberOfSpaces := numberOfSpaces +1.
+	
+	accounts do: [ :aBankAccount |  aBankAccount reportOn: self ].
+	finalCollection add: (self getTreeIndentation) , 'Balance = ', ((aPortfolio balance) amount) asString , ' pesos'.
+	
+	numberOfSpaces := numberOfSpaces -1.
+	! !
+
+!PortfolioDetailedTreePrinter methodsFor: 'printing' stamp: 'TA 11/18/2022 16:59:05'!
+reportReceptiveAccount: aReceptiveAccount 
+
+ 	| accountSummary |
+	
+	accountSummary := AccountSummaryReport summaryForAnAccount: aReceptiveAccount.
+	finalCollection add: (self getTreeIndentation) , aReceptiveAccount accountName.
+	
+	numberOfSpaces := numberOfSpaces  +1.
+	(accountSummary description) do: [ :aAccountMovement | finalCollection add: ((self getTreeIndentation) , aAccountMovement) ]	.
+	
+	numberOfSpaces := numberOfSpaces -1.
+! !
+
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PortfolioDetailedTreePrinter class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+PortfolioDetailedTreePrinter class
+	instanceVariableNames: ''!
+
+!PortfolioDetailedTreePrinter class methodsFor: 'instance creation' stamp: 'TA 11/18/2022 12:33:02'!
+forPortfolio: aPortfolio 
+
+	^self new initializeForPortfolio: aPortfolio ! !
+
+
+!classDefinition: #PortfolioTreePrinter category: 'ServiciosFinancieros-Ejercicio 5.0'!
+TreePrinter subclass: #PortfolioTreePrinter
+	instanceVariableNames: 'portfolio finalCollection3 numberOfSpaces3'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!PortfolioTreePrinter methodsFor: 'intialization' stamp: 'TA 11/17/2022 20:10:32'!
+initializeForPorfolio: aPortfolio 
+	
+	portfolio := aPortfolio.! !
+
+
+!PortfolioTreePrinter methodsFor: 'printing - private' stamp: 'TA 11/18/2022 16:45:45'!
+getTreeIndentationafs
+
+	| totalSpaces |
+	
+	totalSpaces := ''.
+	
+	(1 to: numberOfSpaces) do: [:aInterval | totalSpaces := totalSpaces , '    '].
+	
+	^totalSpaces ! !
+
+
+!PortfolioTreePrinter methodsFor: 'printing' stamp: 'TA 11/18/2022 16:42:02'!
+report
+	
+	| portfolioAccounts|
+	
+	finalCollection := OrderedCollection new.
+	
+	numberOfSpaces := 1.
+	
+	finalCollection add: portfolio accountName.
+	
+	portfolioAccounts := portfolio childrenAccounts.
+	
+	portfolioAccounts do:[ :aBankAccount  | aBankAccount reportOn: self . ].
+		
+	^finalCollection! !
+
+!PortfolioTreePrinter methodsFor: 'printing' stamp: 'TA 11/18/2022 16:46:12'!
+reportPortfolio: aPortfolio 
+
+	| accounts |
+	
+	accounts := aPortfolio childrenAccounts.
+	
+	finalCollection add: ( (self getTreeIndentation ) , aPortfolio accountName).
+	
+	numberOfSpaces := numberOfSpaces +1.
+	
+	accounts do: [ :aBankAccount | aBankAccount reportOn: self ].
+	
+	numberOfSpaces := numberOfSpaces -1.! !
+
+!PortfolioTreePrinter methodsFor: 'printing' stamp: 'TA 11/18/2022 16:45:53'!
+reportReceptiveAccount: aReceptiveAccount .
+
+	finalCollection add: ( (self getTreeIndentationafs) , aReceptiveAccount accountName).! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PortfolioTreePrinter class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+PortfolioTreePrinter class
+	instanceVariableNames: ''!
+
+!PortfolioTreePrinter class methodsFor: 'instance creation' stamp: 'TA 11/17/2022 20:10:12'!
+forPorfolio: aPortfolio 
+	
+	^self new initializeForPorfolio: aPortfolio ! !
+
+
+!classDefinition: #Transference category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Object subclass: #Transference
+	instanceVariableNames: 'depositLeg withdrawLeg transferValue'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio 5.0'!
+
+!Transference methodsFor: 'value' stamp: 'A 11/11/2022 15:38:24'!
+value
+	
+	^ transferValue.! !
+
+
+!Transference methodsFor: 'intialization' stamp: 'A 11/11/2022 16:40:01'!
+initializeFrom: originAccount to: destinyAccount for: aValue
+	
+	withdrawLeg := TransferenceWithdrawLeg of: self inAccount: originAccount.
+	depositLeg := TransferenceDepositLeg of: self inAccount: destinyAccount.
+	transferValue := aValue.
+	! !
+
+
+!Transference methodsFor: 'tranfer legs' stamp: 'A 11/11/2022 15:46:23'!
+depositLeg
+	^depositLeg. ! !
+
+!Transference methodsFor: 'tranfer legs' stamp: 'A 11/11/2022 15:45:54'!
+withDrawLeg
+	^withdrawLeg. ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Transference class' category: 'ServiciosFinancieros-Ejercicio 5.0'!
+Transference class
+	instanceVariableNames: ''!
+
+!Transference class methodsFor: 'instance creation' stamp: 'A 11/11/2022 16:43:48'!
+register: aValue from: originAccount to: destinyAccount 
+	
+	^(self new initializeFrom: originAccount to: destinyAccount for: aValue)! !
